@@ -1,0 +1,21 @@
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: max(700px, 100vh);
+  position: relative;
+}
+.hero p {
+  font-size: 3rem;
+}
+.hero::before {
+  content: "";
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  background-color: lightblue;
+}
