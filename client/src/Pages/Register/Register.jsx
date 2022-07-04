@@ -52,11 +52,11 @@ function Register() {
         alert("user failed to register");
         break;
       case "user registered":
-        navigate("/");
+        navigate("/Login");
         break;
 
       default:
-        navigate("/");
+        navigate("/Login");
         break;
     }
   };
@@ -69,6 +69,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faUser} />
             <input
+              value={body.name}
               onChange={handleInputs}
               type="text"
               name="name"
@@ -79,6 +80,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faEnvelope} />
             <input
+              value={body.email}
               onChange={handleInputs}
               type="email"
               name="email"
@@ -89,6 +91,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faPhone} />
             <input
+              value={body.phone}
               onChange={handleInputs}
               type="number"
               name="phone"
@@ -99,6 +102,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faBriefcase} />
             <input
+              value={body.work}
               onChange={handleInputs}
               type="text"
               name="work"
@@ -109,6 +113,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faLock} />
             <input
+              value={body.password}
               onChange={handleInputs}
               type="password"
               name="password"
@@ -119,6 +124,7 @@ function Register() {
           <div className="input-row">
             <FontAwesomeIcon icon={faLock} />
             <input
+              value={body.cpassword}
               onChange={handleInputs}
               type="password"
               name="cpassword"

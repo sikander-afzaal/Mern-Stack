@@ -18,6 +18,7 @@ router.post("/login", async (req, res) => {
     const checkEmail = await User.findOne({
       email: email,
     });
+    console.log(checkEmail);
     if (checkEmail) {
       const isPwdMatch = await bcrypt.compare(password, checkEmail.password); //comparing entered pwd and pwd stored in db
       token = await checkEmail.generateAuthToken(); //creating token for user

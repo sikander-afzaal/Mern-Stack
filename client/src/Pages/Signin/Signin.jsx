@@ -53,6 +53,7 @@ function Signin() {
           <div className="input-row">
             <FontAwesomeIcon icon={faEnvelope} />
             <input
+              value={body.email}
               onChange={inputHandler}
               type="email"
               name="email-login"
@@ -63,6 +64,7 @@ function Signin() {
           <div className="input-row">
             <FontAwesomeIcon icon={faUser} />
             <input
+              value={body.password}
               onChange={inputHandler}
               type="password"
               name="password-login"
