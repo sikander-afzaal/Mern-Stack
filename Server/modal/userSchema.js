@@ -35,6 +35,26 @@ const userSchema = new mongooseClient.Schema({
       },
     },
   ],
+  messages: [
+    {
+      message: {
+        type: String,
+        required: true,
+      },
+      phone: {
+        type: Number,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      name: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 // hashing passwords ----------------
 userSchema.pre("save", async function (next) {

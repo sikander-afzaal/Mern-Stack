@@ -67,12 +67,15 @@ function About() {
           work: change.work ? change.work : profile.work,
           phone: change.phone ? change.phone : profile.phone,
           email: change.email ? change.email : profile.email,
+          checkEmail: change.email ? true : false,
           id: profile.id,
         }),
       });
       const data = await response.json();
+      setLoader(true);
       if (data.err === "Email Already Used") {
         alert("Email already registered boi");
+        setLoader(false);
       } else if (data.message === "changes saved") {
         fetchFunc();
       }

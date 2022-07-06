@@ -142,13 +142,17 @@ router.get("/about", middleware, (req, res) => {
 
 //route for edit info
 router.post("/change", async (req, res) => {
-  const { id, work, phone, name, email } = req.body;
+  const { id, work, phone, name, email, checkEmail } = req.body;
   const emailUser = await User.findOne({
     email: email,
   });
-  if (emailUser) {
-    return res.status(401).json({ err: "Email Already Used" });
+  // user does not enter email to change it so we just check email if new email entered
+  if (checkEmail) {
+    if (emailUser) {
+      return res.status(401).json({ err: "Email Already Used" });
+    }
   }
+
   await User.updateOne(
     {
       _id: id,
@@ -162,4 +166,24 @@ router.post("/change", async (req, res) => {
   );
   return res.status(200).json({ message: "changes saved" });
 });
+
+//route for contact us page
+router.post("/contact", async (req, res) => {
+  const { phone, message, id, email, desc, name } = req.body;
+  await User.updateOne(
+    { _id: id },
+    {
+      $push: {
+        messages: {
+          message: desc,
+          name: name,
+          email: email,
+          phone: phone,
+        },
+      },
+    }
+  );
+  res.status(200).json({ message: "Thank you for contacting us" });
+});
+
 module.exports = router;
