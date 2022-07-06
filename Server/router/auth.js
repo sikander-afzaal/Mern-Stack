@@ -1,5 +1,7 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const router = express.Router();
 require("../db/conn");
 const User = require("../modal/userSchema");
@@ -18,12 +20,11 @@ router.post("/login", async (req, res) => {
     const checkEmail = await User.findOne({
       email: email,
     });
-    console.log(checkEmail);
     if (checkEmail) {
       const isPwdMatch = await bcrypt.compare(password, checkEmail.password); //comparing entered pwd and pwd stored in db
       token = await checkEmail.generateAuthToken(); //creating token for user
-      res.cookie("jwt", token, {
-        expires: new Date(Date.now() + 2560000),
+      res.cookie("jwtoken", token, {
+        expires: new Date(Date.now() + 256000000),
         httpOnly: true,
       });
 
@@ -107,6 +108,36 @@ router.post("/register", async (req, res) => {
   //   .catch((error) => {
   //     console.log(error);
   //   });
+});
+
+//about section route
+
+//middleware for our app
+const middleware = async (req, res, next) => {
+  try {
+    const token = req.cookies.jwtoken; // getting token
+    const verifyToken = jwt.verify(token, process.env.SECRET_KEY); //verifing token
+    if (verifyToken) {
+      const signedUser = await User.findOne({
+        //finding user
+        _id: verifyToken._id,
+        "tokens.token": token,
+      });
+      if (!signedUser) {
+        throw new Error("User not found");
+      }
+      req.userId = signedUser._id;
+      req.rootUser = signedUser;
+      req.token = token;
+    }
+    next();
+  } catch (err) {
+    res.status(401).send("Token not provided");
+  }
+};
+
+router.get("/about", middleware, (req, res) => {
+  res.send(req.rootUser);
 });
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const dotenv = require("dotenv");
 const express = require("express");
 const app = express();
+const cookieParser = require("cookie-parser");
 
 // so out api key doesnot become public
 dotenv.config({
@@ -13,24 +14,9 @@ const PORT = process.env.PORT; // port of the server
 require("./db/conn");
 
 app.use(express.json()); // converting all the data to json format
-
+app.use(cookieParser());
 app.use(require("./router/auth")); //we link the router file here so we can use the routes
 
-//middleware for our app
-const middleware = (req, res, next) => {
-  console.log("middle-ware");
-  next();
-};
-
-//routes made using express js
-
-app.get("/", (req, res) => {
-  res.send("Main page");
-});
-app.get("/about", middleware, (req, res) => {
-  res.send("about-page");
-});
-
 app.listen(PORT, () => {
-  console.log("lol");
+  console.log(`port ${PORT}`);
 });
