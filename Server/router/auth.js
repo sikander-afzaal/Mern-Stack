@@ -140,4 +140,26 @@ router.get("/about", middleware, (req, res) => {
   res.send(req.rootUser);
 });
 
+//route for edit info
+router.post("/change", async (req, res) => {
+  const { id, work, phone, name, email } = req.body;
+  const emailUser = await User.findOne({
+    email: email,
+  });
+  if (emailUser) {
+    return res.status(401).json({ err: "Email Already Used" });
+  }
+  await User.updateOne(
+    {
+      _id: id,
+    },
+    {
+      name: name,
+      work: work,
+      email: email,
+      phone: phone,
+    }
+  );
+  return res.status(200).json({ message: "changes saved" });
+});
 module.exports = router;
