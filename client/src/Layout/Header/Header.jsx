@@ -1,44 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark, faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import { UserContextCreate } from "../../Context/userContext";
 
 import "./Header.css";
+import { useContext } from "react";
 function Header() {
   const [open, setOpen] = useState(false);
-  const location = useLocation();
-  const home = useRef();
-  const about = useRef();
-  const login = useRef();
-  const register = useRef();
-  const contact = useRef();
-  useEffect(() => {
-    switch (location.pathname) {
-      case "/":
-        document.querySelector(".active").classList.remove("active");
-        home.current.classList.add("active");
-        break;
-      case "/About":
-        document.querySelector(".active").classList.remove("active");
-        about.current.classList.add("active");
-        break;
-      case "/Contact":
-        document.querySelector(".active").classList.remove("active");
-        contact.current.classList.add("active");
-        break;
-      case "/Login":
-        document.querySelector(".active").classList.remove("active");
-        login.current.classList.add("active");
-        break;
-      case "/Register":
-        document.querySelector(".active").classList.remove("active");
-        register.current.classList.add("active");
-        break;
-
-      default:
-        break;
-    }
-  }, [location.pathname]);
+  const { state, dispatch } = useContext(UserContextCreate);
 
   //logging out function by clearing the cookie
   const logoutHandler = async () => {
@@ -50,6 +20,7 @@ function Header() {
     });
     const data = await response.json();
     if (data.message) {
+      dispatch({ type: "USER", payload: false });
       alert(data.message);
     }
   };
@@ -62,56 +33,69 @@ function Header() {
           className="mobile"
           icon={faXmark}
         />
-        <Link
-          ref={home}
+        <NavLink
           onClick={() => setOpen(false)}
           to="/"
-          className="nav-link active"
+          className={({ isActive }) =>
+            isActive ? "active navlink" : "navlink"
+          }
         >
           Home
-        </Link>
-        <Link
-          ref={about}
+        </NavLink>
+        <NavLink
           onClick={() => setOpen(false)}
           to="/About"
-          className="nav-link"
+          className={({ isActive }) =>
+            isActive ? "active navlink" : "navlink"
+          }
         >
           About
-        </Link>
-        <Link
-          ref={contact}
+        </NavLink>
+        <NavLink
           onClick={() => setOpen(false)}
           to="/Contact"
-          className="nav-link"
+          className={({ isActive }) =>
+            isActive ? "active navlink" : "navlink"
+          }
         >
           Contact
-        </Link>
-        <Link
-          ref={login}
-          onClick={() => setOpen(false)}
-          to="/Login"
-          className="nav-link"
-        >
-          Login
-        </Link>
-        <Link
-          ref={register}
-          onClick={() => setOpen(false)}
-          to="/Register"
-          className="nav-link"
-        >
-          Sign Up
-        </Link>
-        <Link
-          onClick={() => {
-            setOpen(false);
-            logoutHandler();
-          }}
-          to="/Login"
-          className="nav-link"
-        >
-          Logout
-        </Link>
+        </NavLink>
+        {state.loggedIn ? (
+          <NavLink
+            onClick={() => {
+              setOpen(false);
+              logoutHandler();
+            }}
+            to="/Login"
+            className={({ isActive }) =>
+              isActive ? "active navlink" : "navlink"
+            }
+          >
+            Logout
+          </NavLink>
+        ) : (
+          <>
+            {" "}
+            <NavLink
+              onClick={() => setOpen(false)}
+              to="/Login"
+              className={({ isActive }) =>
+                isActive ? "active navlink" : "navlink"
+              }
+            >
+              Login
+            </NavLink>
+            <NavLink
+              onClick={() => setOpen(false)}
+              to="/Register"
+              className={({ isActive }) =>
+                isActive ? "active navlink" : "navlink"
+              }
+            >
+              Sign Up
+            </NavLink>
+          </>
+        )}
       </div>
       <FontAwesomeIcon
         onClick={() => setOpen(true)}

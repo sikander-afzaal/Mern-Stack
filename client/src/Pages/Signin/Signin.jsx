@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUser } from "@fortawesome/free-solid-svg-icons";
+import { UserContextCreate } from "../../Context/userContext";
 
 import "./Signin.css";
 import login from "../../Assets/login.svg";
 function Signin() {
+  const { dispatch } = useContext(UserContextCreate);
   const navigate = useNavigate();
   const [body, setBody] = useState({
     email: "",
@@ -23,6 +25,7 @@ function Signin() {
       });
     }
   };
+  //loggin in function--------------
   const loginHandler = async (e) => {
     e.preventDefault();
     const response = await fetch("/login", {
@@ -34,6 +37,7 @@ function Signin() {
     });
     const data = await response.json();
     if (data.message === "login success") {
+      dispatch({ type: "USER", payload: true });
       navigate("/");
     } else if (data.err === "please fill the fields") {
       alert("please fill the fields");

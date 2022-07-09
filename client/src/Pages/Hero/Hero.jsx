@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useContext } from "react";
+import { UserContextCreate } from "../../Context/userContext";
 import "./Hero.css";
 function Hero() {
   const [name, setName] = useState("");
+  const { dispatch } = useContext(UserContextCreate);
   const fetchData = async () => {
     const response = await fetch("/about", {
       method: "GET",
@@ -10,7 +13,12 @@ function Hero() {
       },
     });
     const { name } = await response.json();
-    setName(name);
+    if (name) {
+      dispatch({ type: "USER", payload: true });
+      setName(name);
+    } else {
+      dispatch({ type: "USER", payload: false });
+    }
   };
   useEffect(() => {
     fetchData();
