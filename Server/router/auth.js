@@ -186,4 +186,10 @@ router.post("/contact", async (req, res) => {
   res.status(200).json({ message: "Thank you for contacting us" });
 });
 
+//route for logout
+router.get("/logout", async (req, res) => {
+  res.clearCookie("jwtoken", { path: "/" });
+  res.json({ message: "logged out" });
+});
+
 module.exports = router;

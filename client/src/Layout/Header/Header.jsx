@@ -40,6 +40,19 @@ function Header() {
     }
   }, [location.pathname]);
 
+  //logging out function by clearing the cookie
+  const logoutHandler = async () => {
+    const response = await fetch("/logout", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+    if (data.message) {
+      alert(data.message);
+    }
+  };
   return (
     <div className="header">
       <h1 className="logo">MERNSTACK</h1>
@@ -88,6 +101,16 @@ function Header() {
           className="nav-link"
         >
           Sign Up
+        </Link>
+        <Link
+          onClick={() => {
+            setOpen(false);
+            logoutHandler();
+          }}
+          to="/Login"
+          className="nav-link"
+        >
+          Logout
         </Link>
       </div>
       <FontAwesomeIcon

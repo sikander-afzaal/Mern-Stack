@@ -20,6 +20,7 @@ function About() {
     name: "",
   });
   const navigate = useNavigate();
+  //fetching the data
   const fetchFunc = async () => {
     setLoader(true);
     try {
@@ -83,6 +84,7 @@ function About() {
       console.log(error);
     }
   };
+  //input handler-----------------
   const inputHandler = (e) => {
     const inputName = e.target.name;
     setChange((prev) => {
